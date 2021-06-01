@@ -1,6 +1,7 @@
 import copy
 import pathlib
 import pickle
+from remove_road import remove_ground
 
 import fire
 import numpy as np
@@ -32,6 +33,7 @@ def _calculate_num_points_in_gt(data_path, infos, relative_path, remove_outside=
             v_path = info["velodyne_path"]
         points_v = np.fromfile(
             v_path, dtype=np.float32, count=-1).reshape([-1, num_features])
+        points_v = remove_ground(points_v)
         rect = info['calib/R0_rect']
         Trv2c = info['calib/Tr_velo_to_cam']
         P2 = info['calib/P2']
@@ -140,6 +142,7 @@ def _create_reduced_point_cloud(data_path,
         v_path = pathlib.Path(data_path) / v_path
         points_v = np.fromfile(
             str(v_path), dtype=np.float32, count=-1).reshape([-1, 4])
+        points_v = remove_ground(points_v)
         rect = info['calib/R0_rect']
         P2 = info['calib/P2']
         Trv2c = info['calib/Tr_velo_to_cam']
@@ -228,6 +231,7 @@ def create_groundtruth_database(data_path,
             num_features = info['pointcloud_num_features']
         points = np.fromfile(
             velodyne_path, dtype=np.float32, count=-1).reshape([-1, num_features])
+        points = remove_ground(points)
 
         image_idx = info["image_idx"]
         rect = info['calib/R0_rect']

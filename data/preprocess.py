@@ -1,5 +1,6 @@
 import pathlib
 import pickle
+from remove_road import remove_ground
 import time
 from collections import defaultdict
 
@@ -315,6 +316,7 @@ def _read_and_prep_v9(info, root_path, num_point_features, prep_func):
     points = np.fromfile(
         str(v_path), dtype=np.float32,
         count=-1).reshape([-1, num_point_features])
+    points = remove_ground(points)
     image_idx = info['image_idx']
     rect = info['calib/R0_rect'].astype(np.float32)
     Trv2c = info['calib/Tr_velo_to_cam'].astype(np.float32)

@@ -130,7 +130,7 @@ def get_kitti_image_info(path,
                          extend_matrix=True,
                          num_worker=8,
                          relative_path=True,
-                         with_imageshape=True):
+                         with_imageshape=False):
     # image_infos = []
     root_path = pathlib.Path(path)
     if not isinstance(image_ids, list):
@@ -142,14 +142,14 @@ def get_kitti_image_info(path,
         if velodyne:
             image_info['velodyne_path'] = get_velodyne_path(
                 idx, path, training, relative_path)
-        image_info['img_path'] = get_image_path(idx, path, training,
-                                                relative_path)
-        if with_imageshape:
-            img_path = image_info['img_path']
-            if relative_path:
-                img_path = str(root_path / img_path)
-            image_info['img_shape'] = np.array(
-                io.imread(img_path).shape[:2], dtype=np.int32)
+        # # image_info['img_path'] = get_image_path(idx, path, training,
+        #                                         relative_path)
+        # if with_imageshape:
+        #     img_path = image_info['img_path']
+        #     if relative_path:
+        #         img_path = str(root_path / img_path)
+        #     image_info['img_shape'] = np.array(
+        #         io.imread(img_path).shape[:2], dtype=np.int32)
         if label_info:
             label_path = get_label_path(idx, path, training, relative_path)
             if relative_path:
